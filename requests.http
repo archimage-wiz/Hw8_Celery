@@ -1,0 +1,23 @@
+
+@baseUrl = http://127.0.0.1:5000
+
+
+GET {{baseUrl}}/demo/upscale/?task_id=d02bb9a4-c50a-44ed-bb99-6b8443e47794
+Content-Type: application/json
+
+
+###
+
+POST http://127.0.0.1:5000/demo/upscale/ HTTP/1.1
+Content-Type: multipart/form-data; boundary=Delimiter
+
+
+--Delimiter
+Content-Disposition: form-data; name="image"; filename="1.jpg"
+Content-Type: image/jpeg
+
+< ./1.jpg
+--Delimiter--
+
+
+###

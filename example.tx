@@ -1,0 +1,34 @@
+import cv2
+import numpy
+from cv2 import dnn_superres
+
+file_bytes = numpy.asarray(bytearray(file_bytes), dtype=numpy.uint8)
+image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+scaler = dnn_superres.DnnSuperResImpl_create()
+scaler.readModel("ml_models/EDSR_x2.pb")
+scaler.setModel("edsr", 2)
+image = scaler.upsample(image)
+_, image = cv2.imencode(".jpg", image)
+image_bytes = image.tobytes()
+
+
+import pymongo
+from gridfs import GridFS
+from bson.objectid import ObjectId
+
+
+...
+mongo = pymongo.MongoClient(MONGO_DSN)
+files = GridFS(mongo["files"])
+file_bytes =  files.get(ObjectId(file_id)).read()
+
+
+import io
+from flask import  send_file
+
+
+def download_some_file(...):
+    ...
+    file = io.BytesIO(file_bytes)
+    file.seek(0)
+    return send_file(file, mimetype="image/jpeg", download_name="image.jpg")
